@@ -1,0 +1,15 @@
+# Ignore visible part dataset
+dataset/
+*.jpg
+*.jpeg
+*.png
+*.mp4
+*.avi
+*.mkv
+*.mov
+
+models/pretrained/
+test_media/
+output/runs/train/**/*.pt
+
+venv/
