@@ -1,8 +1,5 @@
 # Ignore visible part dataset
 dataset/
-*.jpg
-*.jpeg
-*.png
 *.mp4
 *.avi
 *.mkv
