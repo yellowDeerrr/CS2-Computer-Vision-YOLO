@@ -1,27 +1,42 @@
 # 🧠 CS2 Computer Vision — YOLOv10 Player Detection
 
-This project demonstrates a **YOLOv10-based object detection model** trained to recognize **CT** and **T** players in _Counter-Strike 2_ gameplay footage.  
-It was created for computer vision experimentation and showcases detection results on in-game screenshots.
+This project demonstrates a **YOLOv10-based computer vision model** trained to recognize **CT** and **T** players in _Counter-Strike 2_ gameplay.  
+It supports **real-time detection** using an **OBS Studio virtual camera**, enabling live object detection directly from the game stream.
 
 ---
 
 ## 📸 Overview
 
-The model is capable of detecting:
+The model can detect:
 
 - 🟦 **CT (Counter-Terrorists)**
 - 🟥 **T (Terrorists)**
 
-Training and testing were done using custom dataset samples collected from _CS2_ gameplay footage.
+Training and testing were performed on a **custom dataset** collected from CS2 gameplay screenshots and clips.
 
 ---
 
 ## 🚀 Features
 
-- Fine-tuned **YOLOv10** model trained on custom CS2 dataset
-- Detects player teams (CT / T) in screenshots or videos
-- Inference examples provided for quick visual comparison
-- Lightweight and fast — runs in real time on GPU
+- 🔹 Custom-trained **YOLOv10** model
+- 🔹 Detects CT and T players in screenshots or live gameplay
+- 🔹 Real-time object detection via **OBS Virtual Camera**
+- 🔹 Lightweight and optimized for GPU acceleration
+- 🔹 Example inference results provided in `/docs`
+
+---
+
+## 🧪 Example Results
+
+Below are some sample detections generated using `yolo predict` command on the trained model.
+
+| Original                           | Detection                        |
+| ---------------------------------- | -------------------------------- |
+| ![Original 1](docs/original/1.png) | ![Detected 1](docs/output/1.jpg) |
+| ![Original 2](docs/original/2.png) | ![Detected 2](docs/output/2.jpg) |
+| ![Original 3](docs/original/3.png) | ![Detected 3](docs/output/3.jpg) |
+| ![Original 4](docs/original/4.png) | ![Detected 4](docs/output/4.jpg) |
+| ![Original 5](docs/original/5.png) | ![Detected 5](docs/output/5.jpg) |
 
 ---
 
@@ -33,29 +48,27 @@ Training and testing were done using custom dataset samples collected from _CS2_
 | **Framework**       | Ultralytics                   |
 | **Classes**         | 2 (`CT`, `T`)                 |
 | **Training Source** | Custom CS2 dataset            |
-| **Output Type**     | Bounding boxes + class labels |
+| **Use Case**        | In-game detection via OBS     |
+| **Output**          | Bounding boxes + class labels |
 
 ---
 
-## 🧪 Example Results
+## 🎮 Real-Time Detection Setup
 
-Below are some sample detections generated using `yolo predict` command on the trained model.
+This project can process live CS2 gameplay using **OBS Studio** and its **Virtual Camera** feature.
 
-| Original                           | Detection                        |
-| ---------------------------------- | -------------------------------- |
-| ![Original 1](docs/original/1.jpg) | ![Detected 1](docs/output/1.jpg) |
-| ![Original 2](docs/original/2.jpg) | ![Detected 2](docs/output/2.jpg) |
-| ![Original 3](docs/original/3.jpg) | ![Detected 3](docs/output/3.jpg) |
-| ![Original 4](docs/original/4.jpg) | ![Detected 4](docs/output/4.jpg) |
-| ![Original 5](docs/original/5.jpg) | ![Detected 5](docs/output/5.jpg) |
+### 🧱 Requirements
 
----
+- [OBS Studio](https://obsproject.com/)
+- [Ultralytics YOLO](https://docs.ultralytics.com/)
+- Python 3.10+
+- GPU (recommended for real-time inference)
 
-## ⚙️ Usage
+### ⚙️ How to Use
 
-### 1️⃣ Clone repository
-
-```bash
-git clone https://github.com/yellowDeerrr/CS2-Computer-Vision-YOLO.git
-cd CS2-Computer-Vision-YOLO
-```
+1. Open **OBS Studio** and start the **Virtual Camera**.
+2. Add _CS2 gameplay window_ as a video source.
+3. In your Python script or CLI, set the YOLO `source` to the virtual camera feed:
+   ```bash
+   yolo predict model=modesl/trained/best.pt source=0
+   ```
