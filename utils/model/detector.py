@@ -1,6 +1,9 @@
 from ultralytics import YOLO
 from config import CONFIDENCE, MODEL_PATH, RENDER_DEVICE
 
+
+
+
 class Detector:
     """Handle CS2 enemy detection using YOLO"""
     
@@ -33,6 +36,17 @@ class Detector:
         
         return detection_counts
     
+    def get_positions(self, results):
+        detections = results[0].boxes
+
+        for box in detections:
+            cls_id = int(box.cls[0])
+            class_name = self.model.names[cls_id]
+            bbox = box.xyxy[0].tolist()  # [x1, y1, x2, y2]
+            print(f"Class: {class_name}, BBox: {bbox}")
+        
+    
+                # Implement shooting logic here
     # def get_detection_details(self, results):
     #     detections = results[0].boxes
     #     details = []

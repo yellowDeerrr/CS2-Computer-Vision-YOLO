@@ -6,7 +6,7 @@ import os
 load_dotenv()
 
 # Paths
-MODEL_PATH = os.getenv("MODEL_PATH", "models/trained/cs2_model5/best.pt")
+MODEL_PATH = os.getenv("MODEL_PATH", "models/trained/best.pt")
 VIDEOS_PATH = os.getenv("VIDEOS_PATH", "test_media/videos/")
 IMAGES_PATH = os.getenv("IMAGES_PATH", "test_media/images/")
 OUTPUT_PATH = os.getenv("OUTPUT_PATH", "output/")
@@ -21,3 +21,6 @@ CONFIDENCE = float(os.getenv("CONFIDENCE", 0.4))
 
 # Camera index
 CAMERA_INDEX = int(os.getenv("CAMERA_INDEX", 1))
+
+FRAME_WIDTH = int(os.getenv("FRAME_WIDTH", 1280))
+FRAME_HEIGHT = int(os.getenv("FRAME_HEIGHT", 720))

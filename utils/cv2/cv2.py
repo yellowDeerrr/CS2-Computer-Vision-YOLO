@@ -1,10 +1,10 @@
 import cv2 
-from config import CAMERA_INDEX
+from config import CAMERA_INDEX, FRAME_WIDTH, FRAME_HEIGHT
 
 class Cv2Utils:
     def __init__(self):
         cv2.namedWindow("Counter Strike 2", cv2.WINDOW_NORMAL)  # Create a resizable window
-        cv2.resizeWindow("Counter Strike 2", 1280, 720)
+        cv2.resizeWindow("Counter Strike 2", FRAME_WIDTH, FRAME_HEIGHT)
         self.cam = cv2.VideoCapture(CAMERA_INDEX) 
         
         if not self.cam.isOpened():

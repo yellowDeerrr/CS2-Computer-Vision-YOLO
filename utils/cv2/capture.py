@@ -1,7 +1,8 @@
 import cv2
-from utils.cv2.detector import Detector
+from utils.model.detector import Detector
 from utils.fps_counter import FPSCounter
 from utils.cv2.cv2 import Cv2Utils
+from utils.mouse.mouse_logic import shootIfPossible
 
 def cv2_process():
 
@@ -16,14 +17,10 @@ def cv2_process():
             break
 
         results = detector.detect(frame)
-        print("\n\n\n##############################\n\n\n\n\n\n\n\n\n")
         
         annotated_frame = results[0].plot()
-        print("Annoted: " + str(annotated_frame))
-        print("\n\n\n----------------\n\n\n")
-        
         detection_counts = detector.get_detection_counts(results)
-        print("Detection counts: " + str(detection_counts))
+
         # Update FPS
         fps_counter.update()
         
@@ -35,6 +32,8 @@ def cv2_process():
         )
 
         cv2.imshow("Counter Strike 2", annotated_frame)
+        
+        # shootIfPossible(results)
 
         # Quit on 'q'
         if cv2.waitKey(1) & 0xFF == ord('q'):
