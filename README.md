@@ -1,8 +1,9 @@
 # CS2 Enemy Detection (YOLO)
 
 YOLO-based real-time enemy detection for Counter-Strike 2 using **OBS Studio virtual camera**
-
 ⚠️ Educational / research purposes only.
+
+### **[Screenshots](#-example-results)**
 
 ## Features
 
