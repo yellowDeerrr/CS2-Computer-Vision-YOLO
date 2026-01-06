@@ -1,0 +1,11 @@
+# Ignore visible part dataset
+dataset/
+*.mp4
+*.avi
+*.mkv
+*.mov
+
+.venv/
+venv/
+
+__pycache__/
