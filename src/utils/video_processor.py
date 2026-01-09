@@ -1,6 +1,6 @@
 import time
 
-from src.config.config import VIDEOS_PATH, VIDEO_NAME, CAMERA_INDEX, USE_VIDEO, FRAME_WIDTH, FRAME_HEIGHT
+from src.config.config import USE_VIDEO
 
 from src.utils.fps import Fps
 from src.utils.yolo import Yolo
@@ -19,7 +19,6 @@ class VideoProcessor:
         self.fps = Fps()
 
 
-        # For differente resolutions (in virtual OBS camera and CS2)
         if USE_VIDEO:
             self.camera.capture_video_file()
         else:
@@ -64,11 +63,11 @@ class VideoProcessor:
                 result_frame = self.yolo.get_result_frame()
 
                 boxes = self.yolo.get_boxes()
-                if len(boxes) > 0 and self.cs_window.is_cs_focused():
+                if len(boxes) > 0:
 
                     detection = boxes[0]
                     cs_res = self.cs_window.get_client_cs_window_center()
-                    self.mouse.move_mouse_calculations(cs_res[0], cs_res[1], detection[0], detection[1])
+                    self.mouse.move_mouse_to_box_center(cs_res[0], cs_res[1], detection[0], detection[1])
                 
                 
                 self.fps.update()

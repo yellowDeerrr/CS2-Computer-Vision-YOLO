@@ -10,7 +10,7 @@ class Mouse:
         self.scale_x = 1
         self.scale_y = 1
         
-        self.listener = keyboard.Listener(on_press=self.caps_lock_press)
+        self.listener = keyboard.Listener(on_press=self.on_press)
         self.listener.start()
     
     def __del__(self):
@@ -20,9 +20,10 @@ class Mouse:
         self.scale_x = cs_width / cam_width
         self.scale_y = cs_height / cam_height
 
-    def caps_lock_press(self, key):
+    def on_press(self, key):
         if key == keyboard.Key.caps_lock:
             self.move_allowed = not self.move_allowed
+
 
     def get_mouse_position(self):
         return wgui.GetCursorPos()
@@ -30,10 +31,14 @@ class Mouse:
     def get_is_movement_allowed(self):
         return self.move_allowed
     
-    def move_mouse_calculations(self, x_cs_center, y_cs_center, x_detection_center, y_detection_center):
-        self.move_mouse_to(x_detection_center - x_cs_center, y_detection_center - y_cs_center)
-    
-    def move_mouse_to(self, x: int, y: int):
-        if self.move_allowed:
-            ctypes.windll.user32.mouse_event(0x0001, int(x), int(y), 0, 0)
+    def move_mouse_to_box_center(self, x_cs_center, y_cs_center, x_detection_center, y_detection_center):
+        if self.move_allowed and self.is_cs_focused():
+            ctypes.windll.user32.mouse_event(0x0001,
+                                              int(x_detection_center * self.scale_x - x_cs_center),
+                                              int(y_detection_center * self.scale_y - y_cs_center),
+                                                0, 0)
+
+    def is_cs_focused(self):
+        foreground_title = wgui.GetWindowText(wgui.GetForegroundWindow())
+        return "counter-strike 2" in foreground_title.lower()
 

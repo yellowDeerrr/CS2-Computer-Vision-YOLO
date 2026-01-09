@@ -20,11 +20,6 @@ class CS_Window:
         wgui.EnumWindows(callback, "Counter-Strike 2")
         return self.hwnd is not None
         
-    def is_cs_focused(self):
-        foreground_title = wgui.GetWindowText(wgui.GetForegroundWindow())
-        return "counter-strike 2" in foreground_title.lower()
-    
-
     def get_fresh_cs_resolution(self):
         if not self.find_cs_window():
             return None
@@ -36,11 +31,6 @@ class CS_Window:
     
     def get_init_cs_resolution(self):
         return self.cs_width, self.cs_height
-    
-    def get_screen_cs_window_center(self):
-        client_width, client_height = self.get_init_cs_resolution()
-        
-        return wgui.ClientToScreen(self.hwnd, (int(client_width / 2), int(client_height / 2)))
     
     def get_client_cs_window_center(self):
         return self.center_wight, self.center_height
