@@ -1,2 +1,4 @@
 OBS resolution: 800x600
 CS2 resolution: 800x600
+
+SET WINDOWS SCALE SETTING ON 100%!!!!

@@ -27,7 +27,7 @@ FRAME_HEIGHT = int(os.getenv("FRAME_HEIGHT", 480))
 # FPS Counter
 UPDATE_FPS_DELAY = float(os.getenv("UPDATE_FPS_DELAY", 0.1))
 FPS_VALUES_DEQUE_SIZE = int(os.getenv("FPS_VALUES_DEQUE_SIZE", 10))
-ROUND_FPS_DIGITS = int(os.getenv("ROUND_FPS_DIGITS", 10))
+ROUND_FPS_DIGITS = int(os.getenv("ROUND_FPS_DIGITS", 2))
 
 # Debug
 USE_VIDEO = os.getenv("USE_VIDEO", "0").lower() in ["true", "1", "yes", "on"]

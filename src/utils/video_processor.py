@@ -1,50 +1,47 @@
-import cv2
-import os
 import time
+
 from src.config.config import VIDEOS_PATH, VIDEO_NAME, CAMERA_INDEX, USE_VIDEO, FRAME_WIDTH, FRAME_HEIGHT
+
 from src.utils.fps import Fps
 from src.utils.yolo import Yolo
+from src.utils.mouse import Mouse
+from src.utils.cs_window import CS_Window
+from src.utils.yolo_window import YoloWindow
+from src.utils.virtual_camera import VirtualCamera
 
 class VideoProcessor:
     def __init__(self):
-        self.fps = Fps()
         self.yolo = Yolo()
-        self.cam = None
-        cv2.namedWindow("Counter Strike 2", cv2.WINDOW_NORMAL) 
-        cv2.resizeWindow("Counter Strike 2", FRAME_WIDTH, FRAME_HEIGHT)
+        self.mouse = Mouse()
+        self.cs_window = CS_Window()
+        self.yolo_window = YoloWindow()
+        self.camera = VirtualCamera()
+        self.fps = Fps()
 
+
+        # For differente resolutions (in virtual OBS camera and CS2)
         if USE_VIDEO:
-            video_path = os.path.join(VIDEOS_PATH, VIDEO_NAME)
-            self.capture_video_file(video_path)
+            self.camera.capture_video_file()
         else:
-            self.capture_virtual_camera(CAMERA_INDEX)
+            self.camera.capture_virtual_camera()
+            self.try_find_cs_window()
+            
+            cs_width, cs_height  = self.cs_window.get_init_cs_resolution()
+            cam_width, cam_height = self.camera.get_vitrual_camera_resolution()
+            self.mouse.calculate_resolution_difference_factor(cs_width=cs_width, cs_height=cs_height,
+                                                               cam_width=cam_width, cam_height=cam_height)
 
-    def __del__(self):
-        self.destroy_windows()
+        self.yolo_window.create_window()
 
-
-    def capture_video_file(self, video_path):
-        self.cam = cv2.VideoCapture(video_path)
-        if not self.cam.isOpened():
-            raise RuntimeError(f"Cv2 hasn't captured any frame from {video_path}")
-
-    def capture_virtual_camera(self, camera_index):
-        self.cam = cv2.VideoCapture(camera_index)
-        if not self.cam.isOpened():
-            attempts = 0
-            max_attempts = 3
-            delay_attempt = 2
-
-            while not self.cam.isOpened():
-                if attempts >= max_attempts:
-                    break
-                print(f"Cv2 hasn't captured any frame from Virtual Camera (Attempt {attempts})\n"
-                        "Trying capture...")
-                time.sleep(delay_attempt)                    
-                self.cam = cv2.VideoCapture(camera_index)
-                attempts += 1
-            if not self.cam.isOpened():
-                raise RuntimeError(f"Virtual camera hasn't been captured; Index: {camera_index}")
+    def try_find_cs_window(self):
+        attemt = 0  
+        max_attemtps = 3
+        while not self.cs_window.find_cs_window():
+            attemt += 1
+            print(f"CS2 wasn't found\n Attempt: {attemt}")
+            if attemt >= max_attemtps:
+                raise RuntimeError("Couldn't find CS2 window")
+            time.sleep(3)
 
 
     def frame_process(self):
@@ -53,8 +50,8 @@ class VideoProcessor:
             not_captured_frame_counter = 0
             max_not_captured_frame = 5
 
-            while self.cam.isOpened():
-                ret, frame = self.cam.read()
+            while self.camera.check_if_camera_is_open():
+                ret, frame = self.camera.read_frame()
                 if not ret:
                     not_captured_frame_counter += 1
                     if not_captured_frame_counter >= max_not_captured_frame:
@@ -62,32 +59,24 @@ class VideoProcessor:
                         break
                     continue
 
-                results = self.yolo.predict(frame)
+            
+                self.yolo.predict(frame)
+                result_frame = self.yolo.get_result_frame()
 
-                annoted_frame = results[0].plot()
+                boxes = self.yolo.get_boxes()
+                if len(boxes) > 0 and self.cs_window.is_cs_focused():
+
+                    detection = boxes[0]
+                    cs_res = self.cs_window.get_client_cs_window_center()
+                    self.mouse.move_mouse_calculations(cs_res[0], cs_res[1], detection[0], detection[1])
+                
                 
                 self.fps.update()
-                self.display_fps(self.fps.get_current_fps_value(), annoted_frame)
 
-                cv2.imshow("Counter Strike 2", annoted_frame)
-                if cv2.waitKey(1) & 0xFF == ord('q'):
-                    raise KeyboardInterrupt
+                self.yolo_window.put_fps_on_frame(result_frame, self.fps.get_current_fps_value())
+                self.yolo_window.put_allowed_mouse(result_frame, self.mouse.get_is_movement_allowed())
+                self.yolo_window.display_frame(result_frame)
         except KeyboardInterrupt:
             print("User stopped program")
         except Exception as e:
             raise RuntimeError(e)
-            
-
-    def display_fps(self, fps_value, frame):
-        cv2.putText(frame, f'{fps_value}', (10, 30),
-                    cv2.FONT_HERSHEY_DUPLEX, 0.8, (0, 255, 255), 2, 10)
-
-    def destroy_windows(self):
-        average_fps = self.fps.get_average_fps()
-        if average_fps == -1:
-            print("Error occured while calculating average fps")
-        else:
-            print(f"Average FPS: {average_fps}")
-
-        self.cam.release()
-        cv2.destroyAllWindows()

@@ -18,6 +18,13 @@ class Fps:
 
         self.fps_values = deque(maxlen=FPS_VALUES_DEQUE_SIZE)
 
+    def __del__(self):
+        average_fps = self.get_average_fps()
+        if average_fps == -1:
+            print("Error occured while calculating average fps")
+        else:
+            print(f"Average FPS: {average_fps}")
+
     def get_current_fps_value(self):
         return self.current_fps_value
     
