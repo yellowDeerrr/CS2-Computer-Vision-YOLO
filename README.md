@@ -3,7 +3,19 @@
 YOLO-based real-time enemy detection for Counter-Strike 2 using **OBS Studio virtual camera**
 ⚠️ Educational / research purposes only.
 
-## **[Screenshots](#-example-results)**
+## 🧪 Example Results
+
+Below are some sample detections generated using `yolo predict` command on the trained model.
+
+| Original                     | Detection                     |
+| ---------------------------- | ----------------------------- |
+| ![Original 1](docs/in/1.jpg) | ![Detected 1](docs/out/1.jpg) |
+| ![Original 2](docs/in/2.jpg) | ![Detected 2](docs/out/2.jpg) |
+| ![Original 3](docs/in/3.jpg) | ![Detected 3](docs/out/3.jpg) |
+| ![Original 4](docs/in/4.jpg) | ![Detected 4](docs/out/4.jpg) |
+| ![Original 5](docs/in/5.jpg) | ![Detected 5](docs/out/5.jpg) |
+| ![Original 6](docs/in/6.jpg) | ![Detected 6](docs/out/6.jpg) |
+
 
 ## Features
 
@@ -199,19 +211,6 @@ To use this with CS2, you need to set up OBS Virtual Camera:
 3. **Start Virtual Camera** (Tools → Virtual Camera → Start)
 4. **Set CAMERA_INDEX in .env** to match your virtual camera (usually 1 or 2)
 5. **Run the detection application**
-
-## 🧪 Example Results
-
-Below are some sample detections generated using `yolo predict` command on the trained model.
-
-| Original                     | Detection                     |
-| ---------------------------- | ----------------------------- |
-| ![Original 1](docs/in/1.jpg) | ![Detected 1](docs/out/1.jpg) |
-| ![Original 2](docs/in/2.jpg) | ![Detected 2](docs/out/2.jpg) |
-| ![Original 3](docs/in/3.jpg) | ![Detected 3](docs/out/3.jpg) |
-| ![Original 4](docs/in/4.jpg) | ![Detected 4](docs/out/4.jpg) |
-| ![Original 5](docs/in/5.jpg) | ![Detected 5](docs/out/5.jpg) |
-| ![Original 6](docs/in/6.jpg) | ![Detected 6](docs/out/6.jpg) |
 
 ## 🐛 Troubleshooting
 
